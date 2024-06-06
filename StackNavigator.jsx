@@ -7,6 +7,7 @@ import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 import SavedScreen from './Screens/SavedScreen';
 import BookingScreen from './Screens/BookingScreen';
 import ProfileScreen from './Screens/ProfileScreen';
+import SearchScreen from './Screens/SearchScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -78,6 +79,7 @@ const StackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Main" component={BottomTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="Search" component={SearchScreen} options={{headerShown:false}}/>
     </Stack.Navigator>
   );
 };
