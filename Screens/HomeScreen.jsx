@@ -7,7 +7,8 @@ import {
   Text,
   TextInput,
   View,
-  Image
+  Image,
+  Alert
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, Feather, EvilIcons } from "@expo/vector-icons";
@@ -64,6 +65,40 @@ const HomeScreen = () => {
       />
     );
   };
+
+  const searchPlaces = (place)=>{
+    if(!route.params || !selectedDates ){
+      Alert.alert(
+        'Invalid Details',
+        'Please enter all the detail',
+        [
+          {
+            text: 'Cancel',
+            // onPress: () => Alert.alert('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        {
+          cancelable: false,
+          onDismiss: () =>
+            Alert.alert(
+              'This alert was dismissed by tapping outside of the alert dialog.',
+            ),
+        },
+      );
+    }
+    if(route.params && selectedDates){
+      navigation.navigate("Places",{
+        rooms:rooms,
+        adults:adult,
+        children:children,
+        selectedDates:selectedDates,
+        place:place
+      })
+    }
+  };
+  
+  
 
   const increment = (type) => {
     if (type === "rooms") setRooms((prev) => prev + 1);
@@ -173,6 +208,7 @@ const HomeScreen = () => {
               />
             </Pressable>
             <Pressable
+            onPress={()=>searchPlaces(route?.params.input)}
               style={{
                 paddingHorizontal: 10,
                 borderColor: "#FFC72C",
