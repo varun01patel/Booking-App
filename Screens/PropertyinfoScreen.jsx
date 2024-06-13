@@ -7,15 +7,16 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { pixelNormalize } from "../Components/Normalise";
 import { MaterialIcons } from "@expo/vector-icons";
 import Amenities from "../Components/Amenities";
 
 const PropertyInfoScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const [showButton, setShowButton] = useState(false);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -33,33 +34,35 @@ const PropertyInfoScreen = () => {
       },
     });
   }, []);
+
+  const handleScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const isScrolledToBottom =
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+    setShowButton(isScrolledToBottom);
+  };
+
   const difference = route.params.oldPrice - route.params.newPrice;
   const offerPrice = (Math.abs(difference) / route.params.oldPrice) * 100;
   return (
     <>
       <SafeAreaView>
-        <ScrollView>
-          <Pressable
-            style={{ flexDirection: "row", flexWrap: "wrap", margin: 10 }}
-          >
-            {route.params.photos.slice(0, 5).map((photo) => (
-              <View style={{ margin: 6 }}>
+        <ScrollView onScroll={handleScroll} scrollEventThrottle={16}>
+          <Pressable style={{ flexDirection: "row", flexWrap: "wrap", margin: 10 }}>
+            {route.params.photos.slice(0, 5).map((photo, index) => (
+              <View key={index} style={{ margin: 6 }}>
                 <Image
                   style={{
                     width: 120,
-                    height: pixelNormalize(80),
-                    borderRadius: pixelNormalize(4),
+                    height: 80,
+                    borderRadius: 4,
                   }}
                   source={{ uri: photo.image }}
                 />
               </View>
             ))}
-            <Pressable
-              style={{ alignItems: "center", justifyContent: "center" }}
-            >
-              <Text style={{ textAlign: "center", marginLeft: 20 }}>
-                Show More
-              </Text>
+            <Pressable style={{ alignItems: "center", justifyContent: "center" }}>
+              <Text style={{ textAlign: "center", marginLeft: 20 }}>Show More</Text>
             </Pressable>
           </Pressable>
 
@@ -73,9 +76,7 @@ const PropertyInfoScreen = () => {
             }}
           >
             <View>
-              <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-                {route.params.name}
-              </Text>
+              <Text style={{ fontSize: 25, fontWeight: "bold" }}>{route.params.name}</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -115,9 +116,7 @@ const PropertyInfoScreen = () => {
                 borderRadius: 6,
               }}
             >
-              <Text style={{ color: "white", fontSize: 13 }}>
-                Travel sustainable
-              </Text>
+              <Text style={{ color: "white", fontSize: 13 }}>Travel sustainable</Text>
             </View>
           </View>
 
@@ -157,9 +156,7 @@ const PropertyInfoScreen = () => {
             >
               {route.params.oldPrice * route.params.adults}
             </Text>
-            <Text style={{ fontSize: 20 }}>
-              Rs {route.params.newPrice * route.params.adults}
-            </Text>
+            <Text style={{ fontSize: 20 }}>Rs {route.params.newPrice * route.params.adults}</Text>
           </View>
           <View
             style={{
@@ -194,27 +191,15 @@ const PropertyInfoScreen = () => {
             }}
           >
             <View>
-              <Text
-                style={{ fontSize: 16, fontWeight: "600", marginBottom: 3 }}
-              >
-                Check In
-              </Text>
-              <Text
-                style={{ fontSize: 16, fontWeight: "bold", color: "#007FFF" }}
-              >
+              <Text style={{ fontSize: 16, fontWeight: "600", marginBottom: 3 }}>Check In</Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#007FFF" }}>
                 {route.params.selectedDates.startDate}
               </Text>
             </View>
 
             <View>
-              <Text
-                style={{ fontSize: 16, fontWeight: "600", marginBottom: 3 }}
-              >
-                Check Out
-              </Text>
-              <Text
-                style={{ fontSize: 16, fontWeight: "bold", color: "#007FFF" }}
-              >
+              <Text style={{ fontSize: 16, fontWeight: "600", marginBottom: 3 }}>Check Out</Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#007FFF" }}>
                 {route.params.selectedDates.endDate}
               </Text>
             </View>
@@ -223,11 +208,9 @@ const PropertyInfoScreen = () => {
             <Text style={{ fontSize: 16, fontWeight: "600", marginBottom: 3 }}>
               Rooms and Guests
             </Text>
-            <Text
-              style={{ fontSize: 16, fontWeight: "bold", color: "#007FFF" }}
-            >
-              {route.params.rooms} rooms {route.params.adults} adults{" "}
-              {route.params.children} children
+            <Text style={{ fontSize: 16, fontWeight: "bold", color: "#007FFF" }}>
+              {route.params.rooms} rooms {route.params.adults} adults {route.params.children}{" "}
+              children
             </Text>
           </View>
 
@@ -252,31 +235,42 @@ const PropertyInfoScreen = () => {
         </ScrollView>
       </SafeAreaView>
 
-      <Pressable
-      onPress={() => navigation.navigate("Rooms",{
-        rooms:route.params.availableRooms,
-        oldPrice:route.params.oldPrice,
-        newPrice:route.params.newPrice,
-        name:route.params.name,
-        children:route.params.children,
-        adults:route.params.adults,
-        rating:route.params.rating,
-        startDate:route.params.selectedDates.startDate,
-        endDate:route.params.selectedDates.endDate
-      })}
-        style={{
-          backgroundColor: "#6CB4EE",
-          position: "absolute",
-          bottom: 20,
-          padding: 15,
-          width:"95%",
-          marginHorizontal:10,
-        }}
-      >
-        <Text style={{ textAlign: "center", color: "white",fontWeight:"bold",fontSize:17 }}>
-          Select Availabilty
-        </Text>
-      </Pressable>
+      {showButton && (
+        <Pressable
+          onPress={() =>
+            navigation.navigate("Rooms", {
+              rooms: route.params.availableRooms,
+              oldPrice: route.params.oldPrice,
+              newPrice: route.params.newPrice,
+              name: route.params.name,
+              children: route.params.children,
+              adults: route.params.adults,
+              rating: route.params.rating,
+              startDate: route.params.selectedDates.startDate,
+              endDate: route.params.selectedDates.endDate,
+            })
+          }
+          style={{
+            backgroundColor: "#6CB4EE",
+            position: "absolute",
+            bottom: 20,
+            padding: 15,
+            width: "95%",
+            marginHorizontal: 10,
+          }}
+        >
+          <Text
+            style={{
+              textAlign: "center",
+              color: "white",
+              fontWeight: "bold",
+              fontSize: 17,
+            }}
+          >
+            Select Availability
+          </Text>
+        </Pressable>
+      )}
     </>
   );
 };

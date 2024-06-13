@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const BookingScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>BookingScreen</Text>
+      <Text>Booking Screen</Text>
     </SafeAreaView>
   );
 }

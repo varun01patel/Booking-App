@@ -11,6 +11,9 @@ import SearchScreen from './Screens/SearchScreen';
 import PlacesScreen from './Screens/PlacesScreen';
 import MapScreen from './Screens/MapScreen';
 import PropertyinfoScreen from './Screens/PropertyinfoScreen';
+import RoomScreen from './Screens/RoomScreen';
+import UserScreen from './Screens/UserScreen';
+import ConfirmationScreen from './Screens/ConfirmationScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,7 +37,7 @@ function BottomTabs() {
       />
       <Tab.Screen
         name="Saved"
-        component={SavedScreen}
+        component={HomeScreen}
         options={{
           tabBarLabel: "Saved",
           headerShown: false,
@@ -48,7 +51,7 @@ function BottomTabs() {
       />
       <Tab.Screen
         name="Bookings"
-        component={BookingScreen}
+        component={HomeScreen}
         options={{
           tabBarLabel: "Bookings",
           headerShown: false,
@@ -62,7 +65,7 @@ function BottomTabs() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={HomeScreen}
         options={{
           tabBarLabel: "Profile",
           headerShown: false,
@@ -86,6 +89,9 @@ const StackNavigator = () => {
       <Stack.Screen name="Places" component={PlacesScreen} />
       <Stack.Screen name="Map" component={MapScreen} />
       <Stack.Screen name="Info" component={PropertyinfoScreen} />
+      <Stack.Screen name="Rooms" component={RoomScreen} />
+      <Stack.Screen name="User" component={UserScreen} />
+      <Stack.Screen name="Confirmation" component={ConfirmationScreen} options={{ headerShown: false }}/>
 
     </Stack.Navigator>
   );

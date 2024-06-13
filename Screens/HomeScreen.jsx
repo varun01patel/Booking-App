@@ -126,23 +126,26 @@ const HomeScreen = () => {
             }}
           >
             <Pressable
-            onPress={()=>navigation.navigate("Search")}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 10,
-                paddingHorizontal: 10,
-                borderColor: "#FFC72C",
-                borderWidth: 2,
-                paddingVertical: 15,
-              }}
-            >
-              <Feather name="search" size={24} color="black" />
-              <TextInput
-                placeholderTextColor="black"
-                placeholder={route?.params? route.params.input :"Enter Your Destination"}
-              />
-            </Pressable>
+  onPress={() => navigation.navigate("Search")}
+  style={{
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 10,
+    borderColor: "#FFC72C",
+    borderWidth: 2,
+    paddingVertical: 15,
+  }}
+>
+  <Feather name="search" size={24} color="black" />
+  <TextInput
+    style={{ flex: 1 }}  // Ensures TextInput takes available space
+    placeholderTextColor="black"
+    placeholder={route?.params ? route.params.input : "Enter Your Destination"}
+    editable={false}  // Makes the TextInput non-editable to allow Pressable to capture the press event
+  />
+</Pressable>
+
             <Pressable
               style={{
                 flexDirection: "row",
@@ -205,6 +208,7 @@ const HomeScreen = () => {
               <TextInput
                 placeholderTextColor="black"
                 placeholder={`${rooms} room . ${adult} adult . ${children} children`}
+                editable={false}
               />
             </Pressable>
             <Pressable
